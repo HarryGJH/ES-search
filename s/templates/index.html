@@ -6,9 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewpoint" content="width=device-width,initial-scale=1">
     <title>Just搜搜！</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -69,6 +74,18 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+
+    <!-- 显示区域 -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-offset-2">
+                <div id="showData">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 <script>
@@ -80,14 +97,39 @@
             type: "POST",
             data: { "search_msg": searchMsg},
             success: function (data) {
-                console.log(data)
+                console.log("111",data)
                 if (data) {
                     //展示结果条数
                     $('#totalNum').html("约 <b style='color:red'>" + data.hits.total.value + "</b> 条结果")
                     //结果展示
-                    $.each(data.hits.hits,function(index,item){
-                        console.log(item._source.title)
+                    var html = '';
+                    $.each(data.hits.hits, function(index, item) {
+                        console.log(item._source["标题"])
+                        html += 
+                            '<a href="' + item._source["视频连接"] + '">\n' +         // url
+                            //'<div class="article-pic"><img src=""></div>\n' +   // picture
+                            '<h3>' + item._source["标题"] + '</h3>\n' +
+                            '<h5>' + "弹幕数量：" + item._source["弹幕数量"] + '</h5>\n' +
+                            '<h5>' + "投币数量：" + item._source["投币数量"] + '</h5>\n' +
+                            '<h5>' + "点赞数量：" + item._source["点赞数量"] + '</h5>\n' +
+                            '<h5>' + "观看数量：" + item._source["观看数量"] + '</h5>\n' +
+                            '<h5>' + "集数：" + item._source["集数"] + '</h5>\n' +
+                            '<h5>' + "是否完结：" + item._source["是否完结"] + '</h5>\n'
+
+                            // '<div class="article-bar article-flash-bar">\n' +
+                            //     '<span class="fn-left">\n' +
+                            //     '<span></span>' +
+                            //     '</span>' +
+                            //     '<span class="fn-right">\n' +
+                            //     '<em><i class="icon12 icon12-eye"></i></em>\n' +
+                            //     '<em data-class="icon12 icon12-infor" data-articleid="1234182"><i class="icon12 icon12-infor"></i>2</em>\n' +
+                            //     '</span>\n' +
+                            // '</div>';
+                            //'<p class="article-content">' + item._source.summary + '</p>\n' + //summary
+
+                            '</a>';
                     })
+                    $("#showData").html(html)
                 }
             }
         })
@@ -95,7 +137,5 @@
 
 
 </script>
-
-
 
 </html>
